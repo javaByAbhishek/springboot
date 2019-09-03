@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.springboot.restservices.repository.UserRepository;
 import com.springboot.restservices.entities.User;
+import com.springboot.restservices.exception.UserExistException;
+import com.springboot.restservices.exception.UserNotFoundException;
 
 @Service
 public class UserService {
@@ -21,21 +23,36 @@ public class UserService {
 		return userRepository.findAll();
 	}
 	
-	//get all user
-	public User createUser(User user){
+	//create user
+	public User createUser(User user)throws UserExistException{
 		System.out.println("create User user:Service");
+		
+		User userExist=userRepository.findByUserName(user.getUserName());
+		if(userExist!= null) { 
+			throw new UserExistException("User Already Exist in dB");
+		}
 		return userRepository.save(user);
 	}
 	
 	//getUserById
-	public Optional<User> getUserById(Long id){
+	public Optional<User> getUserById(Long id) throws UserNotFoundException{
 		System.out.println("getUserById :Service");
-		return userRepository.findById(id);
+		Optional<User> user=userRepository.findById(id);
+		if(!user.isPresent()) {
+			throw new UserNotFoundException("User not found in dB");
+		}
+		return user;
 	}
 	
 	//updateUserById
-	public User updateUserById(Long id,User user){
+	public User updateUserById(Long id,User user) throws UserNotFoundException{
 		System.out.println("updateUserById :Service");
+		
+		Optional<User> optionalUser=userRepository.findById(id);
+		
+		if(!optionalUser.isPresent()) {
+			throw new UserNotFoundException("User not found in dB");
+		}
 		user.setId(id);
 		return userRepository.save(user);
 	}
