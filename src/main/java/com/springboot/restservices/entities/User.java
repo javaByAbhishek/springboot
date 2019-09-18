@@ -7,8 +7,13 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name="user_git")
+
+@JsonIgnoreProperties({"firstName","lastName"})
 public class User {
 	@Id
 	@GeneratedValue
@@ -19,6 +24,7 @@ public class User {
 	private String firstName;
 	private String lastName;	
 	private String email;
+	@JsonIgnore
 	private String role;
 	
 	
