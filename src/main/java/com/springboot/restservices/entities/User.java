@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="user_git")
@@ -11,7 +13,9 @@ public class User {
 	@Id
 	@GeneratedValue
 	private Long id;
+	@NotEmpty(message="Username is Mandatory")
 	private String userName;
+	@Size(min=2, message="FirstName should have two character")
 	private String firstName;
 	private String lastName;	
 	private String email;
